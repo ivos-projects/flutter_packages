@@ -598,11 +598,14 @@ class LatexMath extends InlineMd {
     p0?.group(0);
     String mathText = p0?[1]?.toString() ?? "";
     var workaround = config.latexWorkaround ?? (String tex) => tex;
+    final controller = ScrollController();
     var builder = config.latexBuilder ??
         (BuildContext context, String tex, TextStyle textStyle, bool inline) =>
             Scrollbar(
+              controller: controller,
               scrollbarOrientation: ScrollbarOrientation.bottom,
               child: SingleChildScrollView(
+                controller: controller,
                 scrollDirection: Axis.horizontal,
                 child: Math.tex(
                   tex,
