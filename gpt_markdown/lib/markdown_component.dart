@@ -598,7 +598,7 @@ class LatexMath extends InlineMd {
     p0?.group(0);
     String mathText = p0?[1]?.toString() ?? "";
     var workaround = config.latexWorkaround ?? (String tex) => tex;
-    final controller = ScrollController();
+    final ScrollController controller = ScrollController();
     var builder = config.latexBuilder ??
         (BuildContext context, String tex, TextStyle textStyle, bool inline) =>
             Scrollbar(
