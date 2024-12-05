@@ -600,42 +600,48 @@ class LatexMath extends InlineMd {
     var workaround = config.latexWorkaround ?? (String tex) => tex;
     var builder = config.latexBuilder ??
         (BuildContext context, String tex, TextStyle textStyle, bool inline) =>
-            Math.tex(
-              tex,
-              textStyle: textStyle,
-              mathStyle: MathStyle.display,
-              textScaleFactor: 1,
-              settings: const TexParserSettings(
-                strict: Strict.ignore,
-              ),
-              options: MathOptions(
-                sizeUnderTextStyle: MathSize.large,
-                color: config.style?.color ??
-                    Theme.of(context).colorScheme.onSurface,
-                fontSize: config.style?.fontSize ??
-                    Theme.of(context).textTheme.bodyMedium?.fontSize,
-                mathFontOptions: FontOptions(
-                  fontFamily: "Main",
-                  fontWeight: config.style?.fontWeight ?? FontWeight.normal,
-                  fontShape: FontStyle.normal,
+            Scrollbar(
+              scrollbarOrientation: ScrollbarOrientation.bottom,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Math.tex(
+                  tex,
+                  textStyle: textStyle,
+                  mathStyle: MathStyle.display,
+                  textScaleFactor: 1,
+                  settings: const TexParserSettings(
+                    strict: Strict.ignore,
+                  ),
+                  options: MathOptions(
+                    sizeUnderTextStyle: MathSize.large,
+                    color: config.style?.color ??
+                        Theme.of(context).colorScheme.onSurface,
+                    fontSize: config.style?.fontSize ??
+                        Theme.of(context).textTheme.bodyMedium?.fontSize,
+                    mathFontOptions: FontOptions(
+                      fontFamily: "Main",
+                      fontWeight: config.style?.fontWeight ?? FontWeight.normal,
+                      fontShape: FontStyle.normal,
+                    ),
+                    textFontOptions: FontOptions(
+                      fontFamily: "Main",
+                      fontWeight: config.style?.fontWeight ?? FontWeight.normal,
+                      fontShape: FontStyle.normal,
+                    ),
+                    style: MathStyle.display,
+                  ),
+                  onErrorFallback: (err) {
+                    return Text(
+                      workaround(mathText),
+                      textDirection: config.textDirection,
+                      style: textStyle.copyWith(
+                          color: (!kDebugMode)
+                              ? null
+                              : Theme.of(context).colorScheme.error),
+                    );
+                  },
                 ),
-                textFontOptions: FontOptions(
-                  fontFamily: "Main",
-                  fontWeight: config.style?.fontWeight ?? FontWeight.normal,
-                  fontShape: FontStyle.normal,
-                ),
-                style: MathStyle.display,
               ),
-              onErrorFallback: (err) {
-                return Text(
-                  workaround(mathText),
-                  textDirection: config.textDirection,
-                  style: textStyle.copyWith(
-                      color: (!kDebugMode)
-                          ? null
-                          : Theme.of(context).colorScheme.error),
-                );
-              },
             );
     return WidgetSpan(
       alignment: PlaceholderAlignment.baseline,
